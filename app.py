@@ -143,7 +143,7 @@ import numpy as np
 
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask
+from flask import Flask,request, jsonify
 
 
 
@@ -165,6 +165,7 @@ if __name__ == '__main__':
 	# run() method of Flask class runs the application
 	# on the local development server.
 	#app.run()
-    app.run(debug=True, port=42691)
+    #app.run(debug=True, port=42691)
+    app.run(threaded=True, port=5000)
     
  
