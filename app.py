@@ -143,29 +143,94 @@ import numpy as np
 
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask,request, jsonify
+# from flask import Flask,request, jsonify
 
 
 
-# Flask constructor takes the name of
-# current module (__name__) as argument.
+# # Flask constructor takes the name of
+# # current module (__name__) as argument.
+# app = Flask(__name__)
+
+# # The route() function of the Flask class is a decorator,
+# # which tells the application which URL should call
+# # the associated function.
+# @app.route('/')
+# # ‘/’ URL is bound with hello_world() function.
+# def hello_world():
+# 	return 'Hello World'
+
+# # main driver function
+# if __name__ == '__main__':
+
+# 	# run() method of Flask class runs the application
+# 	# on the local development server.
+# 	#app.run()
+#     #app.run(debug=True, port=42691)
+#     app.run(threaded=True, port=5000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# app.py
+from flask import Flask, request, jsonify
 app = Flask(__name__)
 
-# The route() function of the Flask class is a decorator,
-# which tells the application which URL should call
-# the associated function.
+@app.route('/getmsg/', methods=['GET'])
+def respond():
+    # Retrieve the name from url parameter
+    name = request.args.get("name", None)
+
+    # For debugging
+    print(f"got name {name}")
+
+    response = {}
+
+    # Check if user sent a name at all
+    if not name:
+        response["ERROR"] = "no name found, please send a name."
+    # Check if the user entered a number not a name
+    elif str(name).isdigit():
+        response["ERROR"] = "name can't be numeric."
+    # Now the user entered a valid name
+    else:
+        response["MESSAGE"] = f"Welcome {name} to our awesome platform!!"
+
+    # Return the response in json format
+    return jsonify(response)
+
+@app.route('/post/', methods=['POST'])
+def post_something():
+    param = request.form.get('name')
+    print(param)
+    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
+    if param:
+        return jsonify({
+            "Message": f"Welcome {name} to our awesome platform!!",
+            # Add this option to distinct the POST request
+            "METHOD" : "POST"
+        })
+    else:
+        return jsonify({
+            "ERROR": "no name found, please send a name."
+        })
+
+# A welcome message to test our server
 @app.route('/')
-# ‘/’ URL is bound with hello_world() function.
-def hello_world():
-	return 'Hello World'
+def index():
+    return "<h1>Welcome to our server !!</h1>"
 
-# main driver function
 if __name__ == '__main__':
-
-	# run() method of Flask class runs the application
-	# on the local development server.
-	#app.run()
-    #app.run(debug=True, port=42691)
+    # Threaded option to enable multiple instances for multiple user access support
     app.run(threaded=True, port=5000)
     
  
